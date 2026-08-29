@@ -5,7 +5,7 @@ generic/filesTracked:
     autoDiscover: false
   include:
     makeCopies:
-      - source: "git::gitlab.com/konradodwrot/centralized/assets/prose/common@{{ .var.CENTRALIZED_ASSETS_PROSE_COMMON_REF }}//license/LICENSE"
+      - source: "git::gitlab.com/konradodwrot/centralized/assets/prose/human@{{ .var.CENTRALIZED_ASSETS_PROSE_HUMAN_REF }}//license/LICENSE"
         dest: LICENSE
     renderTemplates:
       - source: "git::gitlab.com/konradodwrot/centralized/assets/prose/human@{{ .var.CENTRALIZED_ASSETS_PROSE_HUMAN_REF }}//prose/repos/{{ .var.repo }}/README.md.ontoRepo.tpl"
