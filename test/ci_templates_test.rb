@@ -169,11 +169,16 @@ end
 
 class EmitEventsTemplateTest < Minitest::Test
   def body
-    template("EmitEvents").first.fetch(".emit-events")
+    spec_and_body("EmitEvents").last.fetch(".emit-events")
   end
 
   def test_is_a_hidden_job
-    template("EmitEvents").first.each_key { |name| assert name.start_with?("."), name }
+    spec_and_body("EmitEvents").last.each_key { |name| assert name.start_with?("."), name }
+  end
+
+  def test_takes_the_image_input_every_other_template_takes
+    assert spec_and_body("EmitEvents").first.dig("spec", "inputs", "image").key?("default")
+    assert_equal "$[[ inputs.image ]]", body["image"]
   end
 
   def test_renders_its_script_rather_than_assuming_a_make_target
