@@ -1,0 +1,28 @@
+##[>] 🤖🤖
+spec:
+  inputs:
+    image:
+      type: string
+      default: $CI_IMAGE
+    stage:
+      type: string
+      default: validate
+    tags:
+      type: array
+      default: [gke-linux-amd64-small]
+---
+generic:files-tracked-verify:
+  stage: $[[ inputs.stage ]]
+  image: $[[ inputs.image ]]
+  tags: $[[ inputs.tags ]]
+  rules:
+    - if: $CI_COMMIT_TAG
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      when: manual
+      allow_failure: true
+  script:
+    - '[ -f shared/generic/make/generic.mk ] || ${CHE_BIN:-che} render-templates --profiles=genericSetup'
+    - make generic-files-tracked-verify
+##[<] 🤖🤖

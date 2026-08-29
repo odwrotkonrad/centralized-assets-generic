@@ -1,0 +1,91 @@
+##[>] 🤖🤖
+$LOAD_PATH.unshift(File.expand_path('../consumer-repo-config/ci/ruby', __dir__))
+require 'minitest/autorun'
+require 'emit_events'
+require 'tmpdir'
+require 'yaml'
+
+class EmitEventsTest < Minitest::Test
+  ASSETS = 'gitlab.com/konradodwrot/cross-repo/prose/assets'.freeze
+  NOTES = 'gitlab.com/konradodwrot/notes'.freeze
+
+  def repo_root
+    dir = Dir.mktmpdir
+    Dir.mkdir(File.join(dir, '.repo'))
+    write = ->(name, doc) { File.write(File.join(dir, '.repo', name), doc.to_yaml) }
+    write['deps-graph.yml', {
+      'dependsOn' => { NOTES => [], 'ciEnv' => [{ 'uri' => ASSETS, 'type' => 'gitRepository' }] }
+    }]
+    write['downstream.yml', { 'downstream' => [{ 'uri' => NOTES, 'type' => 'gitRepository',
+                                                 'versionEnvVar' => 'NOTES_REF', 'version' => 'v0.0.15' }] }]
+    write['upstream.yml', { 'upstream' => [{ 'uri' => ASSETS, 'type' => 'gitRepository',
+                                             'versionEnvVar' => 'PROSE_ASSETS_REF' }] }]
+    File.write(File.join(dir, '.repo', 'upstream.env'), "PROSE_ASSETS_REF=v0.0.60\n")
+    dir
+  end
+
+  def types(changed, tag: nil)
+    Dir.mktmpdir do |_|
+      root = repo_root
+      EmitEvents.call(changed, repo: 'notes', tag: tag, root: root).map { |e| e['type'] }
+    end
+  end
+
+  def test_a_template_edit_redeclares_structure
+    assert_equal ['artifacts.declared'], types(['.repo/downstream.yml.tpl'])
+    assert_equal ['artifacts.declared'], types(['.repo/deps-graph.yml'])
+  end
+
+  def test_a_tracked_upstream_declaration_redeclares_structure
+    assert_equal ['artifacts.declared'], types(['.repo/upstream.yml'])
+  end
+
+  def test_each_version_file_emits_its_own_event
+    assert_equal ['artifacts.consumed'], types(['.repo/upstream.env'])
+    assert_equal ['artifacts.produced'], types(['.repo/downstream.yml'])
+  end
+
+  def test_one_commit_touching_both_emits_both_in_one_send
+    assert_equal %w[artifacts.declared artifacts.consumed],
+                 types(['.repo/upstream.yml', '.repo/upstream.env'])
+  end
+
+  def test_an_unrelated_commit_owes_nothing
+    assert_empty types(['README.md', 'lib/thing.rb'])
+  end
+
+  def test_a_tag_releases_every_downstream_artifact
+    events = types([], tag: 'v0.0.16')
+    assert_equal ['artifact.released'], events
+  end
+
+  def test_a_release_names_the_artifact_by_its_full_definition
+    root = repo_root
+    details = EmitEvents.call([], repo: 'notes', tag: 'v0.0.16', root: root).first['details']
+    assert_equal NOTES, details['artifact']['uri']
+    assert_equal 'NOTES_REF', details['artifact']['versionEnvVar']
+    assert_equal 'v0.0.16', details['version']
+  end
+
+  def test_a_consumed_event_carries_the_versions_the_lockfile_holds
+    root = repo_root
+    details = EmitEvents.call(['.repo/upstream.env'], repo: 'notes', root: root).first['details']
+    assert_equal [{ 'uri' => ASSETS, 'type' => 'gitRepository', 'versionEnvVar' => 'PROSE_ASSETS_REF',
+                    'version' => 'v0.0.60' }],
+                 details['upstream']
+  end
+
+  def test_an_event_a_job_computed_itself_ships_with_the_rest
+    root = repo_root
+    File.write(File.join(root, EmitEvents::EXTRA_EVENTS_FILE),
+               JSON.generate([{ 'type' => 'ci-var.changed',
+                                'details' => { 'variables' => [{ 'key' => 'GRP_KO_VAR_MISC_REF' }] } }]))
+    assert_equal %w[artifacts.declared ci-var.changed],
+                 EmitEvents.call(['.repo/deps-graph.yml'], repo: 'iac', root: root).map { |e| e['type'] }
+  end
+
+  def test_no_extra_events_file_owes_nothing_extra
+    assert_empty EmitEvents.extra_events(root: repo_root)
+  end
+end
+##[<] 🤖🤖

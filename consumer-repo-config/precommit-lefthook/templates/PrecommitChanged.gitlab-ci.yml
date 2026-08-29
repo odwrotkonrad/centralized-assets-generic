@@ -1,0 +1,26 @@
+##[>] 🤖🤖
+spec:
+  inputs:
+    image:
+      type: string
+      default: $CI_IMAGE
+    stage:
+      type: string
+      default: validate
+    tags:
+      type: array
+      default: [gke-linux-amd64-small]
+---
+generic:precommit-changed:
+  stage: $[[ inputs.stage ]]
+  image: $[[ inputs.image ]]
+  tags: $[[ inputs.tags ]]
+  variables:
+    GIT_DEPTH: "0"
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+  script:
+    - '[ -f shared/generic/make/generic.mk ] || ${CHE_BIN:-che} render-templates --profiles=genericSetup'
+    - git fetch origin $CI_DEFAULT_BRANCH
+    - make generic-precommit-changed
+##[<] 🤖🤖

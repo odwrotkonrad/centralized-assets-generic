@@ -1,0 +1,31 @@
+##[>] 🤖🤖
+spec:
+  inputs:
+    image:
+      type: string
+      default: $CI_IMAGE
+    stage:
+      type: string
+      default: release
+    tags:
+      type: array
+      default: [gke-linux-amd64-small]
+    changes:
+      type: array
+      default: ["**/*"]
+---
+generic:tag-mint:
+  stage: $[[ inputs.stage ]]
+  image: $[[ inputs.image ]]
+  tags: $[[ inputs.tags ]]
+  interruptible: false
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      changes: $[[ inputs.changes ]]
+  variables:
+    GIT_DEPTH: "0"
+    TAG_TOKEN: $REPO_PROTECTED_VAR_BOT_TAG_TOKEN
+  script:
+    - '[ -x shared/generic/ci/tag-mint.zsh ] || ${CHE_BIN:-che} render-templates --profiles=genericSetup'
+    - make generic-tag-mint
+##[<] 🤖🤖

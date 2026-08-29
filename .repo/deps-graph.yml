@@ -1,0 +1,13 @@
+##[>] 🤖
+dependsOn:
+  gitlab.com/konradodwrot/centralized/assets/generic:
+    - gitlab.com/konradodwrot/centralized/assets/prose/human
+    - gitlab.com/konradodwrot/centralized/assets/prose/ai
+    - gitlab.com/konradodwrot/centralized/assets/prose/common
+  ciEnv:
+    - uri: us-central1-docker.pkg.dev/staging-499418/ci/ci-linux
+      type: ociImage
+  devEnv:
+    - uri: gitlab.com/konradodwrot/go-modules/che-schema
+      type: file
+##[<] 🤖

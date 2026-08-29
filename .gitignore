@@ -1,0 +1,12 @@
+##[>] 🤖
+!.repo/
+!.che/
+/AGENTS.md
+/CLAUDE.md
+/assets/data/makefile.agents.md
+/assets/data/repo-structure.md
+/assets/docs-agents/purpose.md
+/shared/
+/lefthook.yml
+/.env
+##[<] 🤖
