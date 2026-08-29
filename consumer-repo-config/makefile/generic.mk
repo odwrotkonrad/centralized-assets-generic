@@ -50,7 +50,7 @@ generic-precommit-install:
 
 #[what] run the pre-push checks over the files this branch changed against origin/main
 generic-precommit-changed:
-	@lefthook run pre-push --force --files "$$(git diff --name-only origin/main...HEAD | tr '\n' ',')"
+	@git diff --name-only origin/main...HEAD | lefthook run pre-push --force --files-from-stdin
 
 #[what] run the pre-push checks over every file
 generic-precommit-all:
