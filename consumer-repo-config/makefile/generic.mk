@@ -12,8 +12,8 @@ GENERIC_SETUP_PROFILES ?= genericSetup
   generic-deps-install generic-semver-next generic-tag-mint generic-dev-env-prepare
 
 ##[>] Generic: Files [genai-include]
-#[what] render every git-tracked generated file (README, LICENSE, repo-specific tracked renders)
-generic-files-tracked-generate:
+#[what] render every git-tracked generated file (README, LICENSE, repo-specific tracked renders); the untracked set first, the tracked templates read it
+generic-files-tracked-generate: generic-files-untracked-generate
 	@$(GENERIC_CHE) run --profiles=$(GENERIC_FILES_TRACKED_PROFILES)
 
 #[what] render every gitignored generated file (agent docs, repo data)
@@ -21,7 +21,7 @@ generic-files-untracked-generate:
 	@$(GENERIC_CHE) run --profiles=$(GENERIC_FILES_UNTRACKED_PROFILES)
 
 #[what] regenerate the tracked files, fail on drift, restore the tree either way
-generic-files-tracked-verify:
+generic-files-tracked-verify: generic-files-untracked-generate
 	@GENERIC_CHE="$(GENERIC_CHE)" GENERIC_FILES_TRACKED_PROFILES="$(GENERIC_FILES_TRACKED_PROFILES)" shared/generic/ci/verify-tracked.zsh
 ##[<] Generic: Files
 
@@ -50,7 +50,7 @@ generic-precommit-install:
 
 #[what] run the pre-push checks over the files this branch changed against origin/main
 generic-precommit-changed:
-	@lefthook run pre-push --force --files "$$(git diff --name-only origin/main...HEAD | tr '\n' ',')"
+	@git diff --name-only origin/main...HEAD | lefthook run pre-push --files-from-stdin
 
 #[what] run the pre-push checks over every file
 generic-precommit-all:
@@ -75,6 +75,6 @@ generic-tag-mint:
 
 ##[>] Generic: Dev Environment [genai-include]
 #[what] make a fresh clone a working checkout: .env, generated files, toolchain, git hooks
-generic-dev-env-prepare: generic-env-generate generic-files-untracked-generate generic-files-tracked-generate generic-deps-install generic-precommit-install
+generic-dev-env-prepare: generic-env-generate generic-files-tracked-generate generic-deps-install generic-precommit-install
 ##[<] Generic: Dev Environment
 ##[<] 🤖🤖

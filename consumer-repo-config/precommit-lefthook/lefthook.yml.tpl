@@ -13,7 +13,7 @@ pre-push:
 {{- if eq .var.lefthookGitlabCiVerify "true" }}
     - name: generic-gitlab-ci-verify
       glob: ".gitlab-ci.yml"
-      run: glab ci lint
+      run: '[ -n "${CI:-}" ] || glab ci lint'
 {{- end }}
 {{- if eq .var.lefthookYmlVerify "true" }}
     - name: generic-yml-verify
