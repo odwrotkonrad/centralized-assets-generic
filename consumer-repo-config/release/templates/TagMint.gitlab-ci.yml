@@ -9,10 +9,12 @@ spec:
       default: release
     tags:
       type: array
-      default: [gke-linux-amd64-small]
+      default:
+        - gke-linux-amd64-small
     changes:
       type: array
-      default: ["**/*"]
+      default:
+        - "**/*"
 ---
 generic:tag-mint:
   stage: $[[ inputs.stage ]]

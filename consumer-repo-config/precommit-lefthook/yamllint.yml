@@ -1,0 +1,14 @@
+##[>] 🤖🤖
+extends: relaxed
+rules:
+  braces:
+    level: error
+    forbid: non-empty
+  brackets:
+    level: error
+    forbid: non-empty
+  line-length: disable
+  document-start: disable
+  truthy: disable
+  comments-indentation: disable
+##[<] 🤖🤖

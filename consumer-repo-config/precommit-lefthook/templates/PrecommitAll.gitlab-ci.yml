@@ -9,7 +9,8 @@ spec:
       default: validate
     tags:
       type: array
-      default: [gke-linux-amd64-small]
+      default:
+        - gke-linux-amd64-small
 ---
 generic:precommit-all:
   stage: $[[ inputs.stage ]]

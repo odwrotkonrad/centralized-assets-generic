@@ -6,7 +6,12 @@ include:
   - local: consumer-repo-config/precommit-lefthook/templates/PrecommitAll.gitlab-ci.yml
   - local: consumer-repo-config/release/templates/TagMint.gitlab-ci.yml
     inputs:
-      changes: [consumer-repo-config/**/*, lib/**/*, .che/**/*, Makefile, .gitlab-ci.yml]
+      changes:
+        - consumer-repo-config/**/*
+        - lib/**/*
+        - .che/**/*
+        - Makefile
+        - .gitlab-ci.yml
 
 workflow:
   rules:
