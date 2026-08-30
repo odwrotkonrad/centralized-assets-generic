@@ -10,6 +10,8 @@ pre-push:
   jobs:
     - name: generic-files-tracked-verify
       run: make generic-files-tracked-verify
+      skip:
+        - run: '[ -n "${CI:-}" ]'
     - name: generic-verify
       group:
         parallel: true

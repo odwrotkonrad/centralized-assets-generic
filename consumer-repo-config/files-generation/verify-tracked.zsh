@@ -16,6 +16,7 @@ $che run --profiles=$profiles
 render_status=$?
 
 git diff --stat
+git --no-pager diff
 git diff --quiet
 drift_status=$?
 
