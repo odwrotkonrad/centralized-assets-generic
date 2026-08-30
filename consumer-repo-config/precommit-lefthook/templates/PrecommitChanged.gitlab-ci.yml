@@ -21,6 +21,6 @@ generic:precommit-changed:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
   script:
     - '[ -f shared/generic/make/generic.mk ] || ${CHE_BIN:-che} render-templates --profiles=genericSetup'
-    - git fetch origin $CI_DEFAULT_BRANCH
+    - git fetch origin "$CI_DEFAULT_BRANCH:refs/remotes/origin/$CI_DEFAULT_BRANCH"
     - make generic-precommit-changed
 ##[<] 🤖🤖
