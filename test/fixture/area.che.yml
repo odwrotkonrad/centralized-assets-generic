@@ -1,6 +1,7 @@
-shell/base/macos:
-  makeLinks:
-    - source: root
-shell/virt/linux:
-  makeLinks:
-    - source: root
+profilesDefinitions:
+  'shell/base/macos':
+    makeLinks:
+      - source: root
+  'shell/virt/linux':
+    makeLinks:
+      - source: root

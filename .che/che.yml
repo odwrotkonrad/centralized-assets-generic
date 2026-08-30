@@ -1,16 +1,36 @@
 # yaml-language-server: $schema=https://gitlab.com/api/v4/projects/konradodwrot%2Fgo-modules/packages/generic/che-schema/v0.0.1-che-min-v0.0.96/che.schema.json
 ##[>] 🤖🤖
-include:
-  sources:
-    - {source: shared/generic/che, optional: true}
+variablesDefinitions:
+  specVariablesDefinitions:
+    CENTRALIZED_ASSETS_PROSE_AI_REF:
+      required: true
+      scope: recursiveSpecsAndProfiles
+    CENTRALIZED_ASSETS_PROSE_COMMON_REF:
+      required: true
+      scope: recursiveSpecsAndProfiles
+    CENTRALIZED_ASSETS_PROSE_HUMAN_REF:
+      required: true
+      scope: recursiveSpecsAndProfiles
+    CHE_SCHEMA_REF:
+      required: true
+      scope: recursiveSpecsAndProfiles
+    OCI_IMAGES_CI_LINUX_REF:
+      required: true
+      scope: recursiveSpecsAndProfiles
+specsInclude:
+  - specDirPath: ./shared/generic/che
+    optional: true
 
-genericSetup:
-  options:
-    autoDiscover: false
-  include:
-    profiles:
-      - source: consumer-repo-config
-        profile: setup
-        variables:
-          repo: centralized/assets/generic
+profilesDefinitions:
+  genericSetup:
+    type: repo-git-untracked
+    options:
+      autoDiscover: false
+    include:
+      profiles:
+        - specDirPath: ./consumer-repo-config
+          profileName: setup
+          variables:
+            repo: centralized/assets/generic
+
 ##[<] 🤖🤖
