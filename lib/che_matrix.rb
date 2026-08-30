@@ -4,7 +4,7 @@ require "yaml"
 # Compares the che profiles a repo publishes against the profiles its CI
 # includes feed to the shared matrix templates.
 module CheMatrix
-  RESERVED_KEYS = %w[options env include].freeze
+  PROFILES_KEY = "profilesDefinitions"
   EXEMPT_MARK = "matrix-exempt"
   TEMPLATE_MARK = "CheProfile"
 
@@ -14,8 +14,8 @@ module CheMatrix
     end
   end
 
-  # published returns every profile name the given che spec bodies declare,
-  # minus reserved keys and keys marked "# matrix-exempt".
+  # published returns every profile name the given che spec bodies define
+  # under profilesDefinitions, minus keys marked "# matrix-exempt".
   def self.published(spec_bodies)
     spec_bodies.flat_map { |body| published_in(body) }.uniq
   end
@@ -35,14 +35,13 @@ module CheMatrix
 
   def self.published_in(spec_yaml)
     exempt = exempt_keys(spec_yaml)
-    top_level_keys(spec_yaml).reject do |key|
-      exempt.include?(key) || RESERVED_KEYS.include?(key)
-    end
+    profile_keys(spec_yaml).reject { |key| exempt.include?(key) }
   end
 
-  def self.top_level_keys(spec_yaml)
+  def self.profile_keys(spec_yaml)
     doc = YAML.safe_load(spec_yaml, aliases: true)
-    doc.is_a?(Hash) ? doc.keys.map(&:to_s) : []
+    profiles = doc.is_a?(Hash) ? doc[PROFILES_KEY] : nil
+    profiles.is_a?(Hash) ? profiles.keys.map(&:to_s) : []
   end
 
   def self.exempt_keys(spec_yaml)
@@ -50,7 +49,7 @@ module CheMatrix
       key, comment = line.split("#", 2)
       next unless comment.to_s.include?(EXEMPT_MARK)
 
-      key.to_s[/\A([A-Za-z][\w\/.-]*):/, 1]
+      key.to_s[/\A\s*['"]?([A-Za-z][\w\/.-]*)['"]?:/, 1]
     end
   end
 
