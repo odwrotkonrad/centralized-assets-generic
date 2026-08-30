@@ -24,4 +24,8 @@ pre-push:
             glob: "*.{yml,yaml}"
             run: yq -e '.' {push_files} >/dev/null
 {{- end }}
+{{- if eq .var.lefthookEofNewlineVerify "true" }}
+          - name: generic-eof-newline-verify
+            run: shared/generic/ci/eof-newline-verify.zsh {push_files}
+{{- end }}
 ##[<] 🤖🤖
