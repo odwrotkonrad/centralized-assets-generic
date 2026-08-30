@@ -2,6 +2,7 @@
 ##[>] 🤖🤖
 profilesDefinitions:
   generic/setup:
+    type: repo-git-untracked
     options:
       autoDiscover: false
     include:
@@ -58,6 +59,7 @@ profilesDefinitions:
                 - tag-mint.zsh
 
   generic/filesTracked:
+    type: repo-git-tracked
     include:
       makeCopies:
         - source:
@@ -73,6 +75,7 @@ profilesDefinitions:
           dest: README.md
 
   generic/filesUntracked:
+    type: repo-git-untracked
     include:
       renderTemplates:
         - source:
@@ -103,6 +106,7 @@ profilesDefinitions:
                 renderReferencedFiles: true
 
   generic/deps:
+    type: repo-git-untracked
     include:
       installPackages:
         - make
