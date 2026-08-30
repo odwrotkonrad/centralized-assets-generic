@@ -28,5 +28,10 @@ class GitlabProjectsTest < Minitest::Test
 
     assert_empty CrossRepo::Gitlab.live_paths(listing, GROUP)
   end
+
+  def test_an_archived_project_is_not_live
+    listing = [{ "path_with_namespace" => "#{GROUP}/cross-repo/misc", "archived" => true }]
+    assert_empty CrossRepo::Gitlab.live_paths(listing, GROUP)
+  end
 end
 ##[<] 🤖🤖
