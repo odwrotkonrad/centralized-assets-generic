@@ -7,8 +7,6 @@ specsInclude:
 
 profilesDefinitions:
   generic/env:
-    options:
-      autoDiscover: false
     include:
       renderTemplates:
         - source: tpl/repo-git-tracked/env.tpl
