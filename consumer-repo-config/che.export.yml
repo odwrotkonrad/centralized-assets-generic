@@ -84,7 +84,7 @@ profilesDefinitions:
       autoDiscover: false
     include:
       renderTemplates:
-        - source: files-generation/cheVariables.yml
+        - source: files-generation/cheVariables.yml.tpl
           dest:
             - path: .che/cheVariables.yml
               options:
