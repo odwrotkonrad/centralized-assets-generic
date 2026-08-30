@@ -75,7 +75,7 @@ module CrossRepo
 
     # The group-relative paths of every project that is not pending deletion.
     def self.live_paths(projects, group)
-      projects.reject { |p| p['marked_for_deletion_on'] || p['marked_for_deletion_at'] }
+      projects.reject { |p| p['archived'] || p['marked_for_deletion_on'] || p['marked_for_deletion_at'] }
               .map { |p| p['path_with_namespace'].delete_prefix("#{group}/") }
     end
   end
