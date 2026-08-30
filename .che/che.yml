@@ -1,19 +1,21 @@
 # yaml-language-server: $schema=https://gitlab.com/api/v4/projects/konradodwrot%2Fgo-modules/packages/generic/che-schema/v0.0.1-che-min-v0.0.96/che.schema.json
 ##[>] 🤖🤖
 specsInclude:
-  - {specDirPath: ./shared/generic/che, optional: true}
+  - specDirPath: ./consumer-repo-config
+    variables:
+      repo: centralized/assets/generic
 
 profilesDefinitions:
-  genericSetup:
-    type: repo-git-untracked
+  generic/env:
     options:
       autoDiscover: false
     include:
-      profiles:
-        - specDirPath: ./consumer-repo-config
-          profileName: setup
-          variables:
-            repo: centralized/assets/generic
+      renderTemplates:
+        - source: tpl/repo-git-tracked/env.tpl
+          dest:
+            - path: .env
+              options:
+                writeType: mergeUpsert
 
 variablesDefinitions:
   specVariablesDefinitions:

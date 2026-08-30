@@ -21,6 +21,6 @@ spec:
     AUTOMATION_PROJECT: konradodwrot/cross-repo/automation
     EMIT_EVENTS_TOKEN: $GRP_KO_PROTECTED_VAR_BOT_EMIT_EVENTS_TOKEN
   script:
-    - '[ -x shared/generic/ci/emit-events.zsh ] || ${CHE_BIN:-che} render-templates --profiles=genericSetup'
+    - '[ -x shared/generic/ci/emit-events.zsh ] || ${BIN_CHE:-che} render-templates --profiles=generic/setup'
     - shared/generic/ci/emit-events.zsh
 ##[<] 🤖🤖

@@ -2,7 +2,7 @@
 ##[>] 🤖🤖
 set -uo pipefail
 
-che=${GENERIC_CHE:-che}
+che=${BIN_CHE:-che}
 profiles=${GENERIC_FILES_TRACKED_PROFILES:-generic/filesTracked}
 root=$(git rev-parse --show-toplevel)
 cd $root

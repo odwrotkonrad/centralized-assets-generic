@@ -1,10 +1,10 @@
 ##[>] 🤖🤖
-GENERIC_CHE ?= $${CHE_BIN:-che}
+BIN_CHE ?= che
 GENERIC_FILES_TRACKED_PROFILES ?= generic/filesTracked
 GENERIC_FILES_UNTRACKED_PROFILES ?= generic/filesUntracked
 GENERIC_ENV_PROFILES ?= generic/env
 GENERIC_DEPS_PROFILES ?= generic/deps
-GENERIC_SETUP_PROFILES ?= genericSetup
+GENERIC_SETUP_PROFILES ?= generic/setup
 
 .PHONY: generic-files-tracked-generate generic-files-untracked-generate generic-files-tracked-verify \
   generic-env-generate generic-env-update-dependencies generic-env-update-from-shell generic-env-update-all \
@@ -14,33 +14,33 @@ GENERIC_SETUP_PROFILES ?= genericSetup
 ##[>] Generic: Files [genai-include]
 #[what] render every git-tracked generated file (README, LICENSE, repo-specific tracked renders); the untracked set first, the tracked templates read it
 generic-files-tracked-generate: generic-files-untracked-generate
-	@$(GENERIC_CHE) run --profiles=$(GENERIC_FILES_TRACKED_PROFILES)
+	@$(BIN_CHE) run --profiles=$(GENERIC_FILES_TRACKED_PROFILES)
 
 #[what] render every gitignored generated file (agent docs, repo data)
 generic-files-untracked-generate:
-	@$(GENERIC_CHE) run --profiles=$(GENERIC_FILES_UNTRACKED_PROFILES)
+	@$(BIN_CHE) run --profiles=$(GENERIC_FILES_UNTRACKED_PROFILES)
 
 #[what] regenerate the tracked files, fail on drift, restore the tree either way
 generic-files-tracked-verify: generic-files-untracked-generate
-	@env GENERIC_CHE="$(GENERIC_CHE)" GENERIC_FILES_TRACKED_PROFILES="$(GENERIC_FILES_TRACKED_PROFILES)" shared/generic/ci/verify-tracked.zsh
+	@env BIN_CHE="$(BIN_CHE)" GENERIC_FILES_TRACKED_PROFILES="$(GENERIC_FILES_TRACKED_PROFILES)" shared/generic/ci/verify-tracked.zsh
 ##[<] Generic: Files
 
 ##[>] Generic: Env [genai-include]
 #[what] render .che/tpl/repo-git-tracked/env.tpl to .env: missing keys only, existing values kept
 generic-env-generate:
-	@env CHE_ENV_UNSET=empty $(GENERIC_CHE) render-templates --profiles=$(GENERIC_ENV_PROFILES) --merge-update=none
+	@env CHE_ENV_UNSET=empty $(BIN_CHE) render-templates --profiles=$(GENERIC_ENV_PROFILES) --merge-update=none
 
 #[what] as generate, plus every upstream pin (.repo/upstream.env) overwritten
 generic-env-update-dependencies:
-	@env CHE_ENV_UNSET=empty $(GENERIC_CHE) render-templates --profiles=$(GENERIC_ENV_PROFILES) --merge-update=dependencies
+	@env CHE_ENV_UNSET=empty $(BIN_CHE) render-templates --profiles=$(GENERIC_ENV_PROFILES) --merge-update=dependencies
 
 #[what] as generate, plus every shell-valued key re-run (glab, op)
 generic-env-update-from-shell:
-	@env CHE_ENV_UNSET=empty $(GENERIC_CHE) render-templates --profiles=$(GENERIC_ENV_PROFILES) --merge-update=shell
+	@env CHE_ENV_UNSET=empty $(BIN_CHE) render-templates --profiles=$(GENERIC_ENV_PROFILES) --merge-update=shell
 
 #[what] every template key overwritten, keys the template does not name kept
 generic-env-update-all:
-	@env CHE_ENV_UNSET=empty $(GENERIC_CHE) render-templates --profiles=$(GENERIC_ENV_PROFILES) --merge-update=all
+	@env CHE_ENV_UNSET=empty $(BIN_CHE) render-templates --profiles=$(GENERIC_ENV_PROFILES) --merge-update=all
 ##[<] Generic: Env
 
 ##[>] Generic: Precommit [genai-include]
@@ -60,7 +60,7 @@ generic-precommit-all:
 ##[>] Generic: Deps [genai-include]
 #[what] install the toolchain the generic targets need: make, lefthook, yq, glab (never che)
 generic-deps-install:
-	@$(GENERIC_CHE) run --profiles=$(GENERIC_DEPS_PROFILES)
+	@$(BIN_CHE) run --profiles=$(GENERIC_DEPS_PROFILES)
 ##[<] Generic: Deps
 
 ##[>] Generic: Release [genai-include]

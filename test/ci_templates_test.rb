@@ -98,7 +98,7 @@ class GenericJobTemplateTest < Minitest::Test
       bootstrap = job(name)["script"].first
 
       refute_includes bootstrap, "make ", name
-      assert_includes bootstrap, "--profiles=genericSetup", name
+      assert_includes bootstrap, "--profiles=generic/setup", name
     end
   end
 
@@ -186,7 +186,7 @@ class EmitEventsTemplateTest < Minitest::Test
 
     refute_includes bootstrap, "make "
     assert_includes bootstrap, "shared/generic/ci/emit-events.zsh"
-    assert_includes bootstrap, "--profiles=genericSetup"
+    assert_includes bootstrap, "--profiles=generic/setup"
   end
 
   def test_runs_its_script_after_the_bootstrap

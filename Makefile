@@ -15,7 +15,7 @@ che-install:
 
 #[what] render this repo's own consumer payload (generic.mk, lefthook.yml, shared/generic/) from its source tree
 generic-setup:
-	@$${CHE_BIN:-che} render-templates --profiles=genericSetup
+	@$${BIN_CHE:-che} render-templates --profiles=generic/setup
 
 shared/generic/make/generic.mk: generic-setup
 ##[<] Setup
