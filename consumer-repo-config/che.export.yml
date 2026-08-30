@@ -42,6 +42,9 @@ profilesDefinitions:
             - source: emit-events.zsh
               dest: ci/emit-events.zsh
               chmod: "0755"
+            - source: upstream-env-drift.zsh
+              dest: ci/upstream-env-drift.zsh
+              chmod: "0755"
             - source: ruby
               dest: ruby
               <<<:
@@ -75,11 +78,25 @@ profilesDefinitions:
                 writeType: partial
                 commentPrefix: "#"
 
+  generic/filesTracked/cheVariables:
+    type: repo-git-tracked
+    options:
+      autoDiscover: false
+    include:
+      renderTemplates:
+        - source: files-generation/cheVariables.yml
+          dest:
+            - path: .che/cheVariables.yml
+              options:
+                writeType: partial
+                commentPrefix: "#"
+
   generic/filesTracked:
     type: repo-git-tracked
     include:
       profiles:
         - generic/filesTracked/gitignore
+        - generic/filesTracked/cheVariables
       makeCopies:
         - source:
             url: gitlab.com/konradodwrot/centralized/assets/prose/human

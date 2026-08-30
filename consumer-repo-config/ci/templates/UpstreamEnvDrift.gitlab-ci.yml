@@ -1,0 +1,28 @@
+##[>] 🤖🤖
+spec:
+  inputs:
+    image:
+      type: string
+      default: $CI_IMAGE
+    stage:
+      type: string
+      default: validate
+    tags:
+      type: array
+      default:
+        - gke-linux-amd64-small
+---
+generic:upstream-env-drift:
+  stage: $[[ inputs.stage ]]
+  image: $[[ inputs.image ]]
+  tags: $[[ inputs.tags ]]
+  allow_failure: true
+  rules:
+    - if: $CI_COMMIT_TAG
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  script:
+    - '[ -x shared/generic/ci/upstream-env-drift.zsh ] || ${BIN_CHE:-che} render-templates --profiles=generic/setup'
+    - shared/generic/ci/upstream-env-drift.zsh
+##[<] 🤖🤖
