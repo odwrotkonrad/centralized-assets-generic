@@ -62,15 +62,11 @@ profilesDefinitions:
                 - semver-bump.zsh
                 - tag-mint.zsh
 
-  generic/filesTracked:
+  generic/filesTracked/gitignore:
     type: repo-git-tracked
+    options:
+      autoDiscover: false
     include:
-      makeCopies:
-        - source:
-            url: gitlab.com/konradodwrot/centralized/assets/prose/human
-            ref: "${{ var.CENTRALIZED_ASSETS_PROSE_HUMAN_REF }}"
-            filepath: shared/license/LICENSE
-          dest: LICENSE
       renderTemplates:
         - source: files-generation/gitignore
           dest:
@@ -78,6 +74,19 @@ profilesDefinitions:
               options:
                 writeType: partial
                 commentPrefix: "#"
+
+  generic/filesTracked:
+    type: repo-git-tracked
+    include:
+      profiles:
+        - generic/filesTracked/gitignore
+      makeCopies:
+        - source:
+            url: gitlab.com/konradodwrot/centralized/assets/prose/human
+            ref: "${{ var.CENTRALIZED_ASSETS_PROSE_HUMAN_REF }}"
+            filepath: shared/license/LICENSE
+          dest: LICENSE
+      renderTemplates:
         - source:
             url: gitlab.com/konradodwrot/centralized/assets/prose/human
             ref: "${{ var.CENTRALIZED_ASSETS_PROSE_HUMAN_REF }}"
