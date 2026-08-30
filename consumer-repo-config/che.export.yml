@@ -1,16 +1,5 @@
 # yaml-language-server: $schema=https://gitlab.com/api/v4/projects/konradodwrot%2Fgo-modules/packages/generic/che-schema/v0.0.1-che-min-v0.0.96/che.schema.json
 ##[>] 🤖🤖
-variablesDefinitions:
-  profilesVariablesDefinitions:
-    setup:
-      repo: {required: true, description: "the consumer's project path under the konradodwrot group, names its prose dir"}
-      CHE_SCHEMA_REF: {required: true, description: "che-schema release the rendered che.yml header pins"}
-      CENTRALIZED_ASSETS_PROSE_HUMAN_REF: {required: true, description: "centralized/assets/prose/human tag the rendered spec pins"}
-      CENTRALIZED_ASSETS_PROSE_COMMON_REF: {required: true, description: "centralized/assets/prose/common tag the rendered spec pins"}
-      CENTRALIZED_ASSETS_PROSE_AI_REF: {required: true, description: "centralized/assets/prose/ai tag the rendered spec pins"}
-      lefthookGitlabCiVerify: {type: boolean, description: "pre-push hook validates .gitlab-ci.yml"}
-      lefthookYmlVerify: {type: boolean, description: "pre-push hook lints yml files"}
-      lefthookLocal: {type: boolean, description: "rendered lefthook.yml also runs the local-only hooks"}
 profilesDefinitions:
   setup:
     options:
@@ -75,4 +64,15 @@ profilesDefinitions:
         - yq
         - glab
 
+variablesDefinitions:
+  profilesVariablesDefinitions:
+    setup:
+      repo: {required: true, description: "the consumer's project path under the konradodwrot group, names its prose dir"}
+      CHE_SCHEMA_REF: {required: true, description: "che-schema release the rendered che.yml header pins"}
+      CENTRALIZED_ASSETS_PROSE_HUMAN_REF: {required: true, description: "centralized/assets/prose/human tag the rendered spec pins"}
+      CENTRALIZED_ASSETS_PROSE_COMMON_REF: {required: true, description: "centralized/assets/prose/common tag the rendered spec pins"}
+      CENTRALIZED_ASSETS_PROSE_AI_REF: {required: true, description: "centralized/assets/prose/ai tag the rendered spec pins"}
+      lefthookGitlabCiVerify: {type: boolean, description: "pre-push hook validates .gitlab-ci.yml"}
+      lefthookYmlVerify: {type: boolean, description: "pre-push hook lints yml files"}
+      lefthookLocal: {type: boolean, description: "rendered lefthook.yml also runs the local-only hooks"}
 ##[<] 🤖🤖
