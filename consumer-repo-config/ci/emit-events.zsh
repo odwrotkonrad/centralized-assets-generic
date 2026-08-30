@@ -4,7 +4,7 @@ set -euo pipefail
 
 #[why] the trigger API takes the event array directly, so one job builds it and posts it: a separate
 #   trigger: job cannot read this job's artifact into a variable, and would double the repo's terminal jobs
-root=${0:a:h:h:h}
+root=${0:a:h:h:h:h}
 cd $root
 
 changed=()
