@@ -2,4 +2,5 @@
 lefthookGitlabCiVerify: "true"
 lefthookYmlVerify: "true"
 lefthookLocal: "false"
+lefthookEofNewlineVerify: "true"
 ##[<] 🤖🤖
