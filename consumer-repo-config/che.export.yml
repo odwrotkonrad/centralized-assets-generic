@@ -72,6 +72,12 @@ profilesDefinitions:
             filepath: shared/license/LICENSE
           dest: LICENSE
       renderTemplates:
+        - source: files-generation/gitignore
+          dest:
+            - path: .gitignore
+              options:
+                writeType: partial
+                commentPrefix: "#"
         - source:
             url: gitlab.com/konradodwrot/centralized/assets/prose/human
             ref: "${{ var.CENTRALIZED_ASSETS_PROSE_HUMAN_REF }}"
