@@ -23,6 +23,6 @@ generic:files-tracked-verify:
       when: manual
       allow_failure: true
   script:
-    - '[ -f shared/generic/make/generic.mk ] || ${CHE_BIN:-che} render-templates --profiles=genericSetup'
+    - '[ -f shared/generic/make/generic.mk ] || ${BIN_CHE:-che} render-templates --profiles=generic/setup'
     - make generic-files-tracked-verify
 ##[<] 🤖🤖
