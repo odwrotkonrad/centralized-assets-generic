@@ -4,12 +4,15 @@ env:
   TREE: root
 profilesDefinitions:
   'base/packages':
+    type: host
     installPackages:
       - git
   base:
+    type: host
     makeLinks:
       - source: root
   'virt/linux':
+    type: host
     include:
       profiles:
         - base
