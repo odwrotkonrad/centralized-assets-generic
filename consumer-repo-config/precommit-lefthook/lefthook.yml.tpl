@@ -24,7 +24,9 @@ pre-push:
 {{- if eq .var.lefthookYmlVerify "true" }}
           - name: generic-yml-verify
             glob: "*.{yml,yaml}"
-            run: yq -e '.' {push_files} >/dev/null
+            env:
+              YAMLLINT_CONFIG_FILE: shared/generic/ci/yamllint.yml
+            run: yamllint {push_files}
 {{- end }}
 {{- if eq .var.lefthookEofNewlineVerify "true" }}
           - name: generic-eof-newline-verify

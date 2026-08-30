@@ -5,20 +5,25 @@ spec:
       type: array
     arches:
       type: array
-      default: [amd64, arm64]
+      default:
+        - amd64
+        - arm64
     image:
       type: string
       default: $CI_IMAGE
     tags:
       type: array
-      default: [gke-linux-$ARCH-small]
+      default:
+        - gke-linux-$ARCH-small
     enabled:
       type: string
       default: "true"
     as_user:
       type: string
       default: "true"
-      options: ["true", "false"]
+      options:
+        - "true"
+        - "false"
     stage:
       type: string
       default: dry-run-apply
