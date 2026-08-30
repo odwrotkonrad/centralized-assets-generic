@@ -7,6 +7,7 @@ specsInclude:
 
 profilesDefinitions:
   generic/env:
+    type: repo-git-untracked
     include:
       renderTemplates:
         - source: tpl/repo-git-tracked/env.tpl
